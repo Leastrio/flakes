@@ -1,31 +1,15 @@
 {
   inputs = {
-    utils.url = "github:numtide/flake-utils";
-    naersk.url = "github:nmattia/naersk";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixCargoIntegration = {
+      url = "github:yusdacra/nix-cargo-integration";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, utils, naersk }:
-    utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages."${system}";
-      naersk-lib = naersk.lib."${system}";
-    in rec {
-      # `nix build`
-      packages.my-project = naersk-lib.buildPackage {
-        pname = "${./.}";
-        root = ./.;
-      };
-      defaultPackage = packages.my-project;
-
-      # `nix run`
-      apps.my-project = utils.lib.mkApp {
-        drv = packages.my-project;
-      };
-      defaultApp = apps.my-project;
-
-      # `nix develop`
-      devShell = pkgs.mkShell {
-        nativeBuildInputs = with pkgs; [ rustc cargo ];
-      };
-    });
+  outputs = inputs@{ nixpkgs, nixCargoIntegration, ... }:
+    nixCargoIntegration.lib.makeOutputs {
+      root = ./.;
+      buildPlatform = "crate2nix";
+    };
 }
-
