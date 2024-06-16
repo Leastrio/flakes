@@ -11,7 +11,7 @@
           inherit system;
         };
 
-        erlangVersion = "erlangR26";
+        erlangVersion = "erlang_26";
         elixirVersion = "elixir_1_16";
 
         elixir = pkgs.beam.packages.${erlangVersion}.${elixirVersion};

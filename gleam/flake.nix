@@ -5,14 +5,16 @@
   };
 
   outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; };
-      in
-      {
+    flake-utils.lib.eachDefaultSystem (system: let 
+        pkgs = import nixpkgs { inherit system; };
+
+        gleam = pkgs.gleam;
+        erlang = pkgs.beam.interpreters.erlang_27;
+      in {
         devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
+          buildInputs = [
             gleam
-            beam.interpreters.erlangR27
+            erlang
           ];
         };
       }
