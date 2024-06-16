@@ -10,11 +10,13 @@
 
         gleam = pkgs.gleam;
         erlang = pkgs.beam.interpreters.erlang_27;
+        rebar3 = pkgs.beam.packages.erlang_27.rebar3;
       in {
         devShell = pkgs.mkShell {
           buildInputs = [
             gleam
             erlang
+            rebar3
           ];
         };
       }
