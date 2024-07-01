@@ -2,25 +2,23 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
     utils.url = "github:numtide/flake-utils";
-    naersk.url = "github:nmattia/naersk";
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, nixpkgs, utils, naersk, ... } @inputs:
+  outputs = { self, nixpkgs, utils, rust-overlay, ... } @inputs:
     utils.lib.eachDefaultSystem (system:
       let 
-        pkgs = nixpkgs.legacyPackages."${system}";
-        naersk-lib = naersk.lib."${system}";      
-      in rec {
-        defaultPackage = naersk-lib.buildPackage {
-          root = ./.;
-        }; 
+        overlays = [ (import rust-overlay) ];
+        pkgs = import nixpkgs {
+          inherit system overlays;
+        }
+      in {
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
-            rustc
-            rust-analyzer
-            cargo
+            rust-bin.stable.latest.default.override {
+              extensions = ["rust-analyzer"]
+            }
           ];
-          RUST_SRC_PATH = pkgs.rustPlatform.rustLibSrc;
         };
       }
     );
