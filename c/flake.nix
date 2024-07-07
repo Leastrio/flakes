@@ -8,7 +8,7 @@
           buildInputs = with pkgs; [
             gcc14
             gnumake
-          ]
+          ];
         };
       }
     );
