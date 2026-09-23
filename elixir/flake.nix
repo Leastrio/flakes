@@ -11,16 +11,20 @@
           inherit system;
         };
 
-        erlangVersion = "erlang_27";
-        elixirVersion = "elixir_1_17";
+        erlangVersion = "erlang_29";
+        elixirVersion = "elixir_1_20";
 
-        elixir = pkgs.beam.packages.${erlangVersion}.${elixirVersion};
+        beam = pkgs.beam.packages.${erlangVersion}
+        
+        elixir = beam.${elixirVersion};
         erlang = pkgs.beam.interpreters.${erlangVersion};
+        expert = beam.expert;
       in rec {
         devShells.default = pkgs.mkShell {
           buildInputs = [
             elixir
             erlang
+            expert
           ];
           ERL_AFLAGS = "-kernel shell_history enabled";
         };
