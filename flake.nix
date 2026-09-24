@@ -6,6 +6,7 @@
       go.path = ./go;
       gleam.path = ./gleam;
       c.path = ./c;
+      js.path = ./js;
     };
   };
 }
