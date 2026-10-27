@@ -13,8 +13,8 @@
       in rec {
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            pkgs.nodejs
-            pkgs.tailwindcss_4
+            pkgs.bun
+            pkgs.tailwindcss-language-server
           ];
         };
       }
